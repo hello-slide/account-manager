@@ -2,14 +2,25 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"github.com/futurenda/google-auth-id-token-verifier"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World")
-}
+var TOKEN string = ""
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":3000", nil)
+	v := googleAuthIDTokenVerifier.Verifier{}
+	aud := ""
+	err := v.VerifyIDToken(TOKEN, []string{
+		aud,
+	})
+	if err == nil {
+		claimSet, err := googleAuthIDTokenVerifier.Decode(TOKEN)
+		if err != nil {
+			fmt.Println("Err")
+		}
+		fmt.Println(claimSet)
+		// claimSet.Iss,claimSet.Email ... (See claimset.go)
+	}else{
+		fmt.Println("ERR")
+	}
 }
