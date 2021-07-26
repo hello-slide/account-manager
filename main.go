@@ -2,25 +2,37 @@ package main
 
 import (
 	"fmt"
-	"github.com/futurenda/google-auth-id-token-verifier"
+	"net/http"
 )
 
-var TOKEN string = ""
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World")
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World")
+}
+
+func updateHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World")
+}
+
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World")
+}
+
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World")
+}
 
 func main() {
-	v := googleAuthIDTokenVerifier.Verifier{}
-	aud := ""
-	err := v.VerifyIDToken(TOKEN, []string{
-		aud,
-	})
-	if err == nil {
-		claimSet, err := googleAuthIDTokenVerifier.Decode(TOKEN)
-		if err != nil {
-			fmt.Println("Err")
-		}
-		fmt.Println(claimSet)
-		// claimSet.Iss,claimSet.Email ... (See claimset.go)
-	}else{
-		fmt.Println("ERR")
+	http.HandleFunc("/", rootHandler)
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/update", updateHandler)
+	http.HandleFunc("/logout", logoutHandler)
+	http.HandleFunc("/delete", deleteHandler)
+
+	if err := http.ListenAndServe(":3000", nil); err !=  nil {
+		fmt.Println(err)
 	}
 }
