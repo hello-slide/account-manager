@@ -3,10 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	dapr "github.com/dapr/go-sdk/client"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
+	client, err := dapr.NewClient()
+	if err != nil {
+		fmt.Fprintf(w, "Error")
+	}
+	defer client.Close()
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {

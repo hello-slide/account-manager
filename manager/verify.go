@@ -1,4 +1,4 @@
-package verify
+package manager
 
 import (
 	"github.com/futurenda/google-auth-id-token-verifier"
@@ -12,6 +12,11 @@ func Verify(token string, url string) (*googleAuthIDTokenVerifier.ClaimSet, erro
 	if err != nil {
 		return nil, err
 	}
+
+	return decode(token)
+}
+
+func decode(token string) (*googleAuthIDTokenVerifier.ClaimSet, error) {
 	claimSet, err := googleAuthIDTokenVerifier.Decode(token)
 	if err != nil{
 		return nil, err
