@@ -1,0 +1,14 @@
+{
+    "iss": "accounts.google.com",
+    "aud": "~~~.apps.googleusercontent.com",
+    "exp": 1627315871,
+    "iat": 1627312271,
+    "sub": "ID",
+    "email": "mail",
+    "email_verified": true,
+    "name": "full name",
+    "picture": "picture link",
+    "given_name": "first name",
+    "family_name": "last name",
+    "locale": "lang"
+}
