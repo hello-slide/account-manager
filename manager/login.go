@@ -1,29 +1,24 @@
 package manager
 
 import (
-	"context"
+	"encoding/json"
+
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func Login(token string, client dapr.Client) (string, error) {
-	publicKey, err := getGoogleOauthPublic(client)
+func Login(token string, ip string, client dapr.Client) (*ReturnData, error) {
+	claim, err := Verify(token, client)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	claim, err := Verify(token, publicKey)
-}
-
-
-func getGoogleOauthPublic(client dapr.Client) (string, error) {
-	ctx := context.Background()
-
-	opt := map[string]string{
-		"version": "2",
-	}
-	secret, err := client.GetSecret(ctx, SECRET_STORE, GOOGLE_OAUTH_PUBLIC_SECRET, opt)
+	userId := claim.Sub
+	userDataJson, err := json.Marshal(claim)
 	if err != nil {
-		return "", nil
+		return nil, err
 	}
 
-	return secret[GOOGLE_OAUTH_PUBLIC_SECRET], nil
+	userState := NewState(client, USER_DATA_STATE)
+	userState.Set(userId, []byte(userDataJson))
+
+	return Update(ip, client, true, "", []byte(userId))
 }
