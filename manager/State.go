@@ -7,46 +7,44 @@ import (
 )
 
 type State struct {
-	client client.Client
+	client *client.Client
+	ctx    *context.Context
 	store  string
 }
 
-func NewState(client client.Client, store string) *State {
+func NewState(client *client.Client, ctx *context.Context, store string) *State {
 	return &State{
 		client: client,
+		ctx:    ctx,
 		store:  store,
 	}
 }
 
-func (state *State) Get(key string) (*client.StateItem, error) {
-	ctx := context.Background()
-
-	return state.client.GetState(ctx, state.store, key)
+func (s *State) Get(key string) (*client.StateItem, error) {
+	return (*s.client).GetState(*s.ctx, s.store, key)
 }
 
-func (state *State) Set(key string, value []byte) error {
-	ctx := context.Background()
-	if err := state.client.SaveState(ctx, state.store, key, value); err != nil {
+func (s *State) Set(key string, value []byte) error {
+	if err := (*s.client).SaveState(*s.ctx, s.store, key, value); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (state *State) Delete(key string) error {
-	ctx := context.Background()
-	return state.client.DeleteState(ctx, state.store, key)
+func (s *State) Delete(key string) error {
+	return (*s.client).DeleteState(*s.ctx, s.store, key)
 }
 
-func (state *State) Update(oldKey string, newKey string) error {
-	oldResult, err := state.Get(oldKey)
+func (s *State) Update(oldKey string, newKey string) error {
+	oldResult, err := s.Get(oldKey)
 	if err != nil {
 		return err
 	}
-	if err := state.Delete(oldKey); err != nil {
+	if err := s.Delete(oldKey); err != nil {
 		return err
 	}
-	if err := state.Set(newKey, oldResult.Value); err != nil {
+	if err := s.Set(newKey, oldResult.Value); err != nil {
 		return err
 	}
 

@@ -10,10 +10,10 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func CreateLoginToken(ip string, client dapr.Client) (string, error) {
+func CreateLoginToken(ip string, client *dapr.Client, ctx *context.Context) (string, error) {
 	var strBuild strings.Builder
 
-	seed, err := getSeed(client)
+	seed, err := getSeed(client, ctx)
 	if err != nil {
 		return "", err
 	}
@@ -24,13 +24,11 @@ func CreateLoginToken(ip string, client dapr.Client) (string, error) {
 	return createHash([]byte(strBuild.String())), nil
 }
 
-func getSeed(client dapr.Client) (string, error) {
-	ctx := context.Background()
-
+func getSeed(client *dapr.Client, ctx *context.Context) (string, error) {
 	opt := map[string]string{
 		"version": "2",
 	}
-	secret, err := client.GetSecret(ctx, SECRET_STORE, SEED_SECRET, opt)
+	secret, err := (*client).GetSecret(*ctx, SECRET_STORE, SEED_SECRET, opt)
 	if err != nil {
 		return "", nil
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -27,6 +28,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Close()
+	ctx := context.Background()
 
 	token, err := network.GetData("Token", w, r)
 	if err != nil {
@@ -34,7 +36,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := manager.Login(token, r.RemoteAddr, client)
+	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -58,13 +60,15 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Close()
+	ctx := context.Background()
+
 	token, err := network.GetData("LoginToken", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
 		return
 	}
 
-	user, err := manager.Update(r.RemoteAddr, client, false, token, []byte(""))
+	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""))
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)

@@ -1,12 +1,14 @@
 package manager
 
 import (
+	"context"
+
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func Update(ip string, client dapr.Client, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
-	userTokenState := NewState(client, LOGIN_TOKEN_STATE)
-	newLoginToken, err := CreateLoginToken(ip, client)
+func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
+	userTokenState := NewState(client, ctx, LOGIN_TOKEN_STATE)
+	newLoginToken, err := CreateLoginToken(ip, client, ctx)
 	if err != nil {
 		return nil, err
 	}

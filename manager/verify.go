@@ -7,8 +7,8 @@ import (
 	googleAuthIDTokenVerifier "github.com/futurenda/google-auth-id-token-verifier"
 )
 
-func Verify(token string, client dapr.Client) (*googleAuthIDTokenVerifier.ClaimSet, error) {
-	publicKey, err := getGoogleOauthPublic(client)
+func Verify(token string, client *dapr.Client, ctx *context.Context) (*googleAuthIDTokenVerifier.ClaimSet, error) {
+	publicKey, err := getGoogleOauthPublic(client, ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -29,13 +29,11 @@ func decode(token string) (*googleAuthIDTokenVerifier.ClaimSet, error) {
 	return claimSet, nil
 }
 
-func getGoogleOauthPublic(client dapr.Client) (string, error) {
-	ctx := context.Background()
-
+func getGoogleOauthPublic(client *dapr.Client, ctx *context.Context) (string, error) {
 	opt := map[string]string{
 		"version": "2",
 	}
-	secret, err := client.GetSecret(ctx, SECRET_STORE, GOOGLE_OAUTH_PUBLIC_SECRET, opt)
+	secret, err := (*client).GetSecret(*ctx, SECRET_STORE, GOOGLE_OAUTH_PUBLIC_SECRET, opt)
 	if err != nil {
 		return "", err
 	}
