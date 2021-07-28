@@ -13,27 +13,11 @@ import (
 func CreateLoginToken(ip string, client *dapr.Client, ctx *context.Context) (string, error) {
 	var strBuild strings.Builder
 
-	seed, err := getSeed(client, ctx)
-	if err != nil {
-		return "", err
-	}
-	strBuild.WriteString(seed)
+	strBuild.WriteString(SeedValue)
 	strBuild.WriteString(ip)
 	strBuild.WriteString(time.Now().String())
 
 	return createHash([]byte(strBuild.String())), nil
-}
-
-func getSeed(client *dapr.Client, ctx *context.Context) (string, error) {
-	opt := map[string]string{
-		"version": "2",
-	}
-	secret, err := (*client).GetSecret(*ctx, SECRET_STORE, SEED_SECRET, opt)
-	if err != nil {
-		return "", nil
-	}
-
-	return secret[SEED_SECRET], nil
 }
 
 func createHash(seed []byte) string {

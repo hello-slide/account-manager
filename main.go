@@ -93,6 +93,20 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	client, err := dapr.NewClient()
+	if err != nil {
+		panic(err)
+	}
+	ctx := context.Background()
+
+	if err := manager.GetGoogleOauthPublic(&client, &ctx); err != nil {
+		panic(err)
+	}
+	if err := manager.GetSeedValue(&client, &ctx); err != nil {
+		panic(err)
+	}
+	client.Close()
+
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/update", updateHandler)

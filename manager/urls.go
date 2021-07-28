@@ -9,3 +9,6 @@ const (
 	PASETO_COMMON_KEY_SECRET   = ""
 	SEED_SECRET                = "seed-value"
 )
+
+var GoogleOauthKey = ""
+var SeedValue = ""
