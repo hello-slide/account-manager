@@ -12,4 +12,3 @@ const (
 
 var GoogleOauthKey string
 var SeedValue string
-var Port string

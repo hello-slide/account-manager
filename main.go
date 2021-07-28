@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
@@ -14,7 +13,7 @@ import (
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
-	client, err := dapr.NewClientWithPort(manager.Port)
+	client, err := dapr.NewClient()
 	if err != nil {
 		fmt.Fprintf(w, "Error")
 	}
@@ -22,7 +21,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClientWithPort(manager.Port)
+	client, err := dapr.NewClient()
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -54,7 +53,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClientWithPort(manager.Port)
+	client, err := dapr.NewClient()
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -94,23 +93,19 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	if manager.Port = os.Getenv("DAPR_GRPC_PORT"); len(manager.Port) == 0 {
-		manager.Port = "3500"
-	}
+	// client, err := dapr.NewClient()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// ctx := context.Background()
 
-	client, err := dapr.NewClientWithPort(manager.Port)
-	if err != nil {
+	if err := manager.GetGoogleOauthPublic(); err != nil {
 		panic(err)
 	}
-	ctx := context.Background()
-
-	if err := manager.GetGoogleOauthPublic(&client, &ctx); err != nil {
+	if err := manager.GetSeedValue(); err != nil {
 		panic(err)
 	}
-	if err := manager.GetSeedValue(&client, &ctx); err != nil {
-		panic(err)
-	}
-	client.Close()
+	// client.Close()
 }
 
 func main() {
