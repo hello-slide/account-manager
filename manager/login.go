@@ -18,7 +18,9 @@ func Login(token string, ip string, client dapr.Client) (*ReturnData, error) {
 	}
 
 	userState := NewState(client, USER_DATA_STATE)
-	userState.Set(userId, []byte(userDataJson))
+	if err := userState.Set(userId, []byte(userDataJson)); err != nil {
+		return nil, err
+	}
 
 	return Update(ip, client, true, "", []byte(userId))
 }

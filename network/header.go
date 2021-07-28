@@ -51,7 +51,7 @@ func GetData(key string, w http.ResponseWriter, r *http.Request) (string, error)
 		return "", err
 	}
 
-	if value, ok := jsonBody[key]; !ok {
+	if value, ok := jsonBody[key]; ok {
 		return value, nil
 	}
 

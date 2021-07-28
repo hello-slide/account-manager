@@ -12,11 +12,15 @@ func Update(ip string, client dapr.Client, isNew bool, oldToken string, value []
 	}
 	if isNew {
 		// Create a new value
-		userTokenState.Set(newLoginToken, value)
+		if err := userTokenState.Set(newLoginToken, value); err != nil {
+			return nil, err
+		}
 
 	} else {
 		// Update
-		userTokenState.Update(oldToken, newLoginToken)
+		if err := userTokenState.Update(oldToken, newLoginToken); err != nil {
+			return nil, err
+		}
 	}
 
 	return &ReturnData{

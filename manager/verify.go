@@ -37,7 +37,7 @@ func getGoogleOauthPublic(client dapr.Client) (string, error) {
 	}
 	secret, err := client.GetSecret(ctx, SECRET_STORE, GOOGLE_OAUTH_PUBLIC_SECRET, opt)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	return secret[GOOGLE_OAUTH_PUBLIC_SECRET], nil
