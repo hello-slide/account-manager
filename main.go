@@ -22,19 +22,25 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := dapr.NewClient()
 	if err != nil {
-		fmt.Fprintf(w, "Error")
+		network.ErrorStatus(w)
+		return
 	}
 	defer client.Close()
 
-	token := network.Header("Token", r)
+	token, err := network.GetData("Token", w, r)
+	if err != nil {
+		return
+	}
 
-	user, err := manager.Login(token[0], r.RemoteAddr, client)
+	user, err := manager.Login(token, r.RemoteAddr, client)
 	if err != nil {
 		network.ErrorStatus(w)
+		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
 		network.ErrorStatus(w)
+		return
 	}
 	w.Write([]byte(tokenJson))
 }
@@ -42,18 +48,24 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func updateHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := dapr.NewClient()
 	if err != nil {
-		fmt.Fprintf(w, "Error")
+		network.ErrorStatus(w)
+		return
 	}
 	defer client.Close()
-	token := network.Header("LoginToken", r)
+	token, err := network.GetData("LoginToken", w, r)
+	if err != nil {
+		return
+	}
 
-	user, err := manager.Update(r.RemoteAddr, client, false, token[0], []byte(""))
+	user, err := manager.Update(r.RemoteAddr, client, false, token, []byte(""))
 	if err != nil {
 		network.ErrorStatus(w)
+		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
 		network.ErrorStatus(w)
+		return
 	}
 	w.Write([]byte(tokenJson))
 }

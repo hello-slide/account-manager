@@ -1,4 +1,4 @@
-package main
+// package main
 
 import (
 	"encoding/json"
@@ -41,6 +41,6 @@ func decode(token string) (*googleAuthIDTokenVerifier.ClaimSet, error) {
 	return claimSet, nil
 }
 
-func main() {
-	Login("")
-}
+// func main() {
+// 	Login("")
+// }
