@@ -2,6 +2,7 @@ package manager
 
 import (
 	"context"
+	"fmt"
 
 	dapr "github.com/dapr/go-sdk/client"
 	googleAuthIDTokenVerifier "github.com/futurenda/google-auth-id-token-verifier"
@@ -35,7 +36,8 @@ func getGoogleOauthPublic(client *dapr.Client, ctx *context.Context) (string, er
 	}
 	secret, err := (*client).GetSecret(*ctx, SECRET_STORE, GOOGLE_OAUTH_PUBLIC_SECRET, opt)
 	if err != nil {
-		return "", err
+		// return "", err
+		return "", fmt.Errorf("getGoogleOauthPublic error")
 	}
 
 	return secret[GOOGLE_OAUTH_PUBLIC_SECRET], nil
