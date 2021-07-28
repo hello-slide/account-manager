@@ -5,7 +5,7 @@ const (
 	LOGIN_TOKEN_STATE = "login-token-state"
 
 	SECRET_STORE               = "account-manager-secret"
-	GOOGLE_OAUTH_PUBLIC_SECRET = "googleOAuthPublic"
+	GOOGLE_OAUTH_PUBLIC_SECRET = "google-oauth-public"
 	PASETO_COMMON_KEY_SECRET   = ""
-	SEED_SECRET                = "seedValue"
+	SEED_SECRET                = "seed-value"
 )
