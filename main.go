@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
@@ -13,7 +14,7 @@ import (
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
-	client, err := dapr.NewClient()
+	client, err := dapr.NewClientWithPort(manager.Port)
 	if err != nil {
 		fmt.Fprintf(w, "Error")
 	}
@@ -21,7 +22,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClient()
+	client, err := dapr.NewClientWithPort(manager.Port)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -53,7 +54,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClient()
+	client, err := dapr.NewClientWithPort(manager.Port)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -92,8 +93,12 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
 }
 
-func main() {
-	client, err := dapr.NewClient()
+func init() {
+	if manager.Port = os.Getenv("DAPR_GRPC_PORT"); len(manager.Port) == 0 {
+		manager.Port = "3500"
+	}
+
+	client, err := dapr.NewClientWithPort(manager.Port)
 	if err != nil {
 		panic(err)
 	}
@@ -106,7 +111,9 @@ func main() {
 		panic(err)
 	}
 	client.Close()
+}
 
+func main() {
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/update", updateHandler)

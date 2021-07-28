@@ -10,5 +10,6 @@ const (
 	SEED_SECRET                = "seed-value"
 )
 
-var GoogleOauthKey = ""
-var SeedValue = ""
+var GoogleOauthKey string
+var SeedValue string
+var Port string
