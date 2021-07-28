@@ -51,9 +51,10 @@ func GetData(key string, w http.ResponseWriter, r *http.Request) (string, error)
 		return "", err
 	}
 
-	if value, ok := jsonBody[key]; ok {
-		return "", fmt.Errorf("key is not found %#v", value)
+	if value, ok := jsonBody[key]; !ok {
+		return value, nil
 	}
 
-	return jsonBody[key], nil
+	ErrorStatus(w)
+	return "", fmt.Errorf("key is not found")
 }
