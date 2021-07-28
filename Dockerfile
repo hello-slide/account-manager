@@ -2,10 +2,11 @@ FROM golang:latest as builder
 
 WORKDIR /go/src
 
-COPY go.mod ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-
+COPY ./manager/ ./manager/
+COPY ./network/ ./network/
 COPY ./main.go ./
 
 ARG CGO_ENABLED=0
