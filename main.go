@@ -42,7 +42,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		network.ErrorStatus(w)
 		return
 	}
-	w.Write([]byte(tokenJson))
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(tokenJson)
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +68,8 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		network.ErrorStatus(w)
 		return
 	}
-	w.Write([]byte(tokenJson))
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(tokenJson)
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
