@@ -1,8 +1,8 @@
 package manager
 
 const (
-	USER_DATA_STATE   = "userDataState"
-	LOGIN_TOKEN_STATE = "autoLoginTokenState"
+	USER_DATA_STATE   = "user-data-state"
+	LOGIN_TOKEN_STATE = "login-token-state"
 
 	SECRET_STORE               = "account-manager-secret"
 	GOOGLE_OAUTH_PUBLIC_SECRET = "google-oauth-public"
