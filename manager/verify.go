@@ -4,7 +4,7 @@ import (
 	"context"
 
 	dapr "github.com/dapr/go-sdk/client"
-	googleAuthIDTokenVerifier "github.com/hello-slide/google-auth-id-token-verifier"
+	googleAuthIDTokenVerifier "github.com/futurenda/google-auth-id-token-verifier"
 )
 
 func Verify(token string, client *dapr.Client, ctx *context.Context) (*googleAuthIDTokenVerifier.ClaimSet, error) {
