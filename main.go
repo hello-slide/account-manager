@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
@@ -93,6 +94,9 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
+	// Delays startup so that the error "ERR_HEALTH_NOT_READY dapr is not ready" does not occur.
+	time.Sleep(1 * time.Minute)
+
 	client, err := dapr.NewClient()
 	if err != nil {
 		panic(err)
