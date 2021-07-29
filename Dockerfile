@@ -22,4 +22,9 @@ FROM scratch as runner
 
 COPY --from=builder /go/bin/main /app/main
 
+# install ca
+COPY cafile.pem /usr/local/share/ca-certificates/
+RUN apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
 ENTRYPOINT ["/app/main"]

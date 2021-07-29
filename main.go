@@ -13,12 +13,12 @@ import (
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, manager.GoogleOauthKey)
-	client, err := dapr.NewClient()
-	if err != nil {
-		fmt.Fprintf(w, "Error")
-	}
-	defer client.Close()
+	fmt.Fprintf(w, "Hello World")
+	// client, err := dapr.NewClient()
+	// if err != nil {
+	// 	fmt.Fprintf(w, "Error")
+	// }
+	// defer client.Close()
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
