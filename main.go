@@ -13,7 +13,7 @@ import (
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, World")
+	fmt.Fprintf(w, manager.GoogleOauthKey)
 	client, err := dapr.NewClient()
 	if err != nil {
 		fmt.Fprintf(w, "Error")
