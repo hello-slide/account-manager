@@ -25,15 +25,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
-		client.Close()
 		return
 	}
-	ctx := context.Background()
+	defer client.Close()
+	ctx := r.Context()
 
 	token, err := network.GetData("Token", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
-		client.Close()
 		return
 	}
 
@@ -41,19 +40,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
-		client.Close()
 		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
-		client.Close()
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(tokenJson)
-	client.Close()
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +60,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Close()
-	ctx := context.Background()
+	ctx := r.Context()
 
 	token, err := network.GetData("LoginToken", w, r)
 	if err != nil {
