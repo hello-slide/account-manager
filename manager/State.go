@@ -2,6 +2,8 @@ package manager
 
 import (
 	"context"
+	"fmt"
+	"unicode/utf8"
 
 	"github.com/dapr/go-sdk/client"
 )
@@ -41,6 +43,10 @@ func (s *state) Update(oldKey string, newKey string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if utf8.RuneCount(oldResult.Value) == 0 {
+		return "", fmt.Errorf("token does not exist")
+	}
+
 	if err := s.Delete(oldKey); err != nil {
 		return "", err
 	}
