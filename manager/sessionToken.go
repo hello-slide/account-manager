@@ -14,7 +14,7 @@ func CreateSessionToken(id []byte, client *dapr.Client, ctx *context.Context) (s
 
 	responce, err := (*client).InvokeMethodWithContent(*ctx, TOKEN_MANAGER, "create", "post", content)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	return string(responce), nil
 }
