@@ -20,14 +20,9 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	// defer client.Close()
 }
 
+var client dapr.Client
+
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClient()
-	if err != nil {
-		network.ErrorStatus(w)
-		fmt.Fprintln(w, err)
-		return
-	}
-	defer client.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -54,13 +49,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	client, err := dapr.NewClient()
-	if err != nil {
-		network.ErrorStatus(w)
-		fmt.Fprintln(w, err)
-		return
-	}
-	defer client.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -95,10 +83,12 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	client, err := dapr.NewClient()
+	_client, err := dapr.NewClient()
 	if err != nil {
-		panic(err)
+		return
 	}
+	client = _client
+
 	ctx := context.Background()
 
 	if err := manager.GetGoogleOauthPublic(&client, &ctx); err != nil {
@@ -107,8 +97,6 @@ func init() {
 	if err := manager.GetSeedValue(&client, &ctx); err != nil {
 		panic(err)
 	}
-
-	client.Close()
 }
 
 func main() {
@@ -119,6 +107,8 @@ func main() {
 	http.HandleFunc("/delete", deleteHandler)
 
 	if err := http.ListenAndServe(":3000", nil); err != nil {
+		client.Close()
 		fmt.Println(err)
 	}
+	client.Close()
 }
