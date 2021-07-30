@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
@@ -26,14 +25,15 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
+		client.Close()
 		return
 	}
-	defer client.Close()
 	ctx := context.Background()
 
 	token, err := network.GetData("Token", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
+		client.Close()
 		return
 	}
 
@@ -41,16 +41,19 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
+		client.Close()
 		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
+		client.Close()
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(tokenJson)
+	client.Close()
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
@@ -94,9 +97,6 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	// Delays startup so that the error "ERR_HEALTH_NOT_READY dapr is not ready" does not occur.
-	time.Sleep(1 * time.Minute)
-
 	client, err := dapr.NewClient()
 	if err != nil {
 		panic(err)
