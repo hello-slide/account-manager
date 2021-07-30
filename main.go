@@ -12,12 +12,15 @@ import (
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World")
-	// client, err := dapr.NewClient()
-	// if err != nil {
-	// 	fmt.Fprintf(w, "Error")
-	// }
-	// defer client.Close()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	text := "hoge"
+	token, err := manager.CreateSessionToken([]byte(text), &client, &ctx)
+	if err != nil {
+		fmt.Fprintln(w, err)
+		return
+	}
+	w.Write([]byte(token))
 }
 
 var client dapr.Client
