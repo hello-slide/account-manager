@@ -36,17 +36,17 @@ func (s *state) Delete(key string) error {
 	return (*s.client).DeleteState(*s.ctx, s.store, key)
 }
 
-func (s *state) Update(oldKey string, newKey string) error {
+func (s *state) Update(oldKey string, newKey string) (string, error) {
 	oldResult, err := s.Get(oldKey)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if err := s.Delete(oldKey); err != nil {
-		return err
+		return "", err
 	}
 	if err := s.Set(newKey, oldResult.Value); err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return string(oldResult.Value), nil
 }

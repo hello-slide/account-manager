@@ -20,13 +20,20 @@ func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, ol
 
 	} else {
 		// Update
-		if err := userTokenState.Update(oldToken, newLoginToken); err != nil {
+		updateValue, err := userTokenState.Update(oldToken, newLoginToken)
+		if err != nil {
 			return nil, err
 		}
+		value = []byte(updateValue)
+	}
+
+	sessionToken, err := CreateSessionToken(value, client, ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &ReturnData{
 		LoginSession: newLoginToken,
-		Session:      "",
+		Session:      sessionToken,
 	}, nil
 }
