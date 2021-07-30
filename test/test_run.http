@@ -1,6 +1,15 @@
-POST http://localhost:3000 HTTP/1.1
+POST http://34.146.142.76/login HTTP/1.1
 Content-Type: application/json
 
-{"Token": "HOGE"}
+{"Token": ""}
 
 ###
+
+GET http://34.146.142.76/
+
+###
+
+POST http://34.146.142.76/update HTTP/1.1
+Content-Type: application/json
+
+{"LoginToken": ""}
