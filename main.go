@@ -28,7 +28,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Close()
-	ctx := r.Context()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	token, err := network.GetData("Token", w, r)
 	if err != nil {
@@ -60,7 +61,8 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer client.Close()
-	ctx := r.Context()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	token, err := network.GetData("LoginToken", w, r)
 	if err != nil {
@@ -106,13 +108,6 @@ func init() {
 		panic(err)
 	}
 
-	// test
-	a := manager.NewState(&client, &ctx, "user-data-state")
-	if err := a.Set("hoge", []byte("hogehoge")); err != nil {
-		panic(err)
-	}
-
-	// end test
 	client.Close()
 }
 
