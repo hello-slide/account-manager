@@ -109,6 +109,14 @@ func init() {
 	if err := manager.GetSeedValue(&client, &ctx); err != nil {
 		panic(err)
 	}
+
+	// test
+	a := manager.NewState(&client, &ctx, "user-data-state")
+	if err := a.Set("hoge", []byte("hogehoge")); err != nil {
+		panic(err)
+	}
+
+	// end test
 	client.Close()
 }
 
