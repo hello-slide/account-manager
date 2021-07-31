@@ -10,12 +10,12 @@ import (
 
 func GetHeader(w http.ResponseWriter, req *http.Request) (map[string]string, error) {
 	if req.Method != "POST" {
-		w.WriteHeader(http.StatusBadRequest)
+		ErrorStatus(w)
 		return nil, fmt.Errorf("bad request")
 	}
 
 	if req.Header.Get("Content-Type") != "application/json" {
-		w.WriteHeader(http.StatusBadRequest)
+		ErrorStatus(w)
 		return nil, fmt.Errorf("bad request")
 	}
 
