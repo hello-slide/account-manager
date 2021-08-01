@@ -18,7 +18,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 var client dapr.Client
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -45,7 +44,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -72,7 +70,6 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -110,13 +107,16 @@ func init() {
 }
 
 func main() {
-	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/account/login", loginHandler)
-	http.HandleFunc("/account/update", updateHandler)
-	http.HandleFunc("/account/logout", logoutHandler)
-	http.HandleFunc("/account/delete", deleteHandler)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", rootHandler)
+	mux.HandleFunc("/account/login", loginHandler)
+	mux.HandleFunc("/account/update", updateHandler)
+	mux.HandleFunc("/account/logout", logoutHandler)
+	mux.HandleFunc("/account/delete", deleteHandler)
 
-	if err := http.ListenAndServe(":3000", nil); err != nil {
+	handler := network.CorsConfig.Handler(mux)
+
+	if err := http.ListenAndServe(":3000", handler); err != nil {
 		client.Close()
 		fmt.Println(err)
 	}
