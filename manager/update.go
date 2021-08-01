@@ -6,9 +6,9 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
+func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte, seed string) (*ReturnData, error) {
 	userTokenState := NewState(client, ctx, LOGIN_TOKEN_STATE)
-	newLoginToken, err := CreateLoginToken(ip, client, ctx)
+	newLoginToken, err := CreateLoginToken(ip, client, ctx, seed)
 	if err != nil {
 		return nil, err
 	}

@@ -10,10 +10,10 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func CreateLoginToken(ip string, client *dapr.Client, ctx *context.Context) (string, error) {
+func CreateLoginToken(ip string, client *dapr.Client, ctx *context.Context, seed string) (string, error) {
 	var strBuild strings.Builder
 
-	strBuild.WriteString(SeedValue)
+	strBuild.WriteString(seed)
 	strBuild.WriteString(ip)
 	strBuild.WriteString(time.Now().String())
 

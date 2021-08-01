@@ -16,6 +16,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 var client dapr.Client
+var GoogleOauthKey string
+var SeedValue string
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -27,7 +29,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx)
+	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx, GoogleOauthKey, SeedValue)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -53,7 +55,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""))
+	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""), SeedValue)
 	if err != nil {
 		network.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -98,10 +100,12 @@ func init() {
 
 	ctx := context.Background()
 
-	if err := manager.GetGoogleOauthPublic(&client, &ctx); err != nil {
+	GoogleOauthKey, err = manager.GetGoogleOauthPublic(&client, &ctx)
+	if err != nil {
 		panic(err)
 	}
-	if err := manager.GetSeedValue(&client, &ctx); err != nil {
+	SeedValue, err = manager.GetSeedValue(&client, &ctx)
+	if err != nil {
 		panic(err)
 	}
 }

@@ -2,6 +2,7 @@ package manager
 
 const (
 	USER_DATA_STATE   = "user-data-state"
+	USER_EMAIL_STATE  = "user-email-state"
 	LOGIN_TOKEN_STATE = "login-token-state"
 
 	SECRET_STORE               = "google-secret-state"
@@ -11,6 +12,3 @@ const (
 
 	TOKEN_MANAGER = "token-manager"
 )
-
-var GoogleOauthKey string
-var SeedValue string
