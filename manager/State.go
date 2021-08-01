@@ -3,6 +3,7 @@ package manager
 import (
 	"context"
 	"fmt"
+	"time"
 	"unicode/utf8"
 
 	"github.com/dapr/go-sdk/client"
@@ -34,11 +35,26 @@ func (s *state) Set(key string, value []byte) error {
 	return nil
 }
 
+func (s *state) SetTTL(key string, value []byte, ttl string) error {
+	item := &client.SetStateItem{
+		Key: key,
+		Metadata: map[string]string{
+			"created-on":   time.Now().UTC().String(),
+			"ttlInSeconds": ttl,
+		},
+		Value: value,
+	}
+	if err := (*s.client).SaveBulkState(*s.ctx, s.store, item); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *state) Delete(key string) error {
 	return (*s.client).DeleteState(*s.ctx, s.store, key)
 }
 
-func (s *state) Update(oldKey string, newKey string) (string, error) {
+func (s *state) Update(oldKey string, newKey string, ttl string) (string, error) {
 	oldResult, err := s.Get(oldKey)
 	if err != nil {
 		return "", err
@@ -50,7 +66,7 @@ func (s *state) Update(oldKey string, newKey string) (string, error) {
 	if err := s.Delete(oldKey); err != nil {
 		return "", err
 	}
-	if err := s.Set(newKey, oldResult.Value); err != nil {
+	if err := s.SetTTL(newKey, oldResult.Value, ttl); err != nil {
 		return "", err
 	}
 
