@@ -111,10 +111,10 @@ func init() {
 
 func main() {
 	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/update", updateHandler)
-	http.HandleFunc("/logout", logoutHandler)
-	http.HandleFunc("/delete", deleteHandler)
+	http.HandleFunc("/account/login", loginHandler)
+	http.HandleFunc("/account/update", updateHandler)
+	http.HandleFunc("/account/logout", logoutHandler)
+	http.HandleFunc("/account/delete", deleteHandler)
 
 	if err := http.ListenAndServe(":3000", nil); err != nil {
 		client.Close()
