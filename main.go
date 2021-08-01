@@ -18,7 +18,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 var client dapr.Client
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	// network.CorsConfig(w, r)
+	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -45,7 +45,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	// network.CorsConfig(w, r)
+	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -72,7 +72,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	// network.CorsConfig(w, r)
+	network.CorsConfig(w, r)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
