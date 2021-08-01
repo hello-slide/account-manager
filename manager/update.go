@@ -14,7 +14,8 @@ func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, ol
 	}
 	if isNew {
 		// Create a new value
-		if err := userTokenState.Set(newLoginToken, value); err != nil {
+		// The data will disappear in 30 days(2592000s).
+		if err := userTokenState.SetTTL(newLoginToken, value, "2592000"); err != nil {
 			return nil, err
 		}
 
