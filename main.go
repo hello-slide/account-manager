@@ -88,7 +88,19 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, World")
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	token, err := network.GetData("LoginToken", w, r)
+	if err != nil {
+		fmt.Fprintln(w, err)
+		return
+	}
+	if err := manager.Delete(&ctx, &client, token); err != nil {
+		network.ErrorStatus(w)
+		fmt.Fprintln(w, err)
+		return
+	}
 }
 
 func init() {
