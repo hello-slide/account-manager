@@ -8,7 +8,7 @@ import (
 	"github.com/hello-slide/account-manager/token"
 )
 
-func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte, seed string) (*ReturnData, error) {
+func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
 	userTokenState := state.NewState(client, ctx, refreshTokenState)
 	newRefreshToken, err := token.CreateRefreshToken(ip, client, ctx)
 	if err != nil {

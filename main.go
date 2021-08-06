@@ -8,17 +8,14 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
-	"github.com/hello-slide/account-manager/token"
 	networkutil "github.com/hello-slide/network-util"
 )
+
+var client dapr.Client
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello World"))
 }
-
-var client dapr.Client
-var GoogleOauthKey string
-var SeedValue string
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -30,7 +27,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx, GoogleOauthKey, SeedValue)
+	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx)
 	if err != nil {
 		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -56,7 +53,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""), SeedValue)
+	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""))
 	if err != nil {
 		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
@@ -105,14 +102,13 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	token.SetEnv()
-	manager.SetEnv()
-
 	_client, err := dapr.NewClient()
 	if err != nil {
 		return
 	}
 	client = _client
+
+	manager.SetEnv()
 }
 
 func main() {

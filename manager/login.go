@@ -9,7 +9,7 @@ import (
 	_token "github.com/hello-slide/account-manager/token"
 )
 
-func Login(token string, ip string, client *dapr.Client, ctx *context.Context, oauthKey string, seed string) (*ReturnData, error) {
+func Login(token string, ip string, client *dapr.Client, ctx *context.Context) (*ReturnData, error) {
 	claim, err := _token.Verify(token, client, ctx)
 	if err != nil {
 		return nil, err
@@ -30,5 +30,5 @@ func Login(token string, ip string, client *dapr.Client, ctx *context.Context, o
 		return nil, err
 	}
 
-	return Update(ip, client, ctx, true, "", []byte(userId), seed)
+	return Update(ip, client, ctx, true, "", []byte(userId))
 }
