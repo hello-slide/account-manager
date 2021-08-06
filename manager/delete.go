@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/dapr/go-sdk/client"
+	"github.com/hello-slide/account-manager/state"
 )
 
 func Delete(ctx *context.Context, client *client.Client, token string) error {
-	loginState := NewState(client, ctx, LOGIN_TOKEN_STATE)
+	loginState := state.NewState(client, ctx, refreshTokenState)
 	if err := loginState.Delete(token); err != nil {
 		return err
 	}

@@ -109,17 +109,6 @@ func init() {
 		return
 	}
 	client = _client
-
-	ctx := context.Background()
-
-	GoogleOauthKey, err = manager.GetGoogleOauthPublic(&client, &ctx)
-	if err != nil {
-		panic(err)
-	}
-	SeedValue, err = manager.GetSeedValue(&client, &ctx)
-	if err != nil {
-		panic(err)
-	}
 }
 
 func main() {

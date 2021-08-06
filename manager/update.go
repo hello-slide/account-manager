@@ -4,38 +4,40 @@ import (
 	"context"
 
 	dapr "github.com/dapr/go-sdk/client"
+	"github.com/hello-slide/account-manager/state"
+	"github.com/hello-slide/account-manager/token"
 )
 
 func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte, seed string) (*ReturnData, error) {
-	userTokenState := NewState(client, ctx, LOGIN_TOKEN_STATE)
-	newLoginToken, err := CreateLoginToken(ip, client, ctx, seed)
+	userTokenState := state.NewState(client, ctx, refreshTokenState)
+	newRefreshToken, err := token.CreateRefreshToken(ip, client, ctx)
 	if err != nil {
 		return nil, err
 	}
 	if isNew {
 		// Create a new value
 		// The data will disappear in 30 days(2592000s).
-		if err := userTokenState.SetTTL(newLoginToken, value, "2592000"); err != nil {
+		if err := userTokenState.SetTTL(newRefreshToken, value, "2592000"); err != nil {
 			return nil, err
 		}
 
 	} else {
 		// Update
 		// The data will disappear in 30 days(2592000s).
-		updateValue, err := userTokenState.Update(oldToken, newLoginToken, "2592000")
+		updateValue, err := userTokenState.Update(oldToken, newRefreshToken, "2592000")
 		if err != nil {
 			return nil, err
 		}
 		value = []byte(updateValue)
 	}
 
-	sessionToken, err := CreateSessionToken(value, client, ctx)
+	sessionToken, err := token.CreateSessionToken(value, client, ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	return &ReturnData{
-		LoginSession: newLoginToken,
+		RefreshToken: newRefreshToken,
 		Session:      sessionToken,
 	}, nil
 }

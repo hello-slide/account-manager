@@ -1,4 +1,4 @@
-package manager
+package token
 
 import (
 	"context"
@@ -12,7 +12,7 @@ func CreateSessionToken(id []byte, client *dapr.Client, ctx *context.Context) (s
 		Data:        id,
 	}
 
-	responce, err := (*client).InvokeMethodWithContent(*ctx, TOKEN_MANAGER, "create", "post", content)
+	responce, err := (*client).InvokeMethodWithContent(*ctx, tokenManagerName, "create", "post", content)
 	if err != nil {
 		return "", err
 	}

@@ -8,6 +8,15 @@
 
 を行います。
 
+```env
+GOOGLE_OAUTH_KEY=*****
+SEED=*****
+TOKEN_MANAGER="token-manager"
+USER_DATA_STATE="user-data-state"
+USER_EMAIL_STATE="user-email-state"
+REFRESH_TOKEN_STATE="login-token-state"
+```
+
 ## LICENSE
 
 [MIT](./LICENSE)

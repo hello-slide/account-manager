@@ -1,4 +1,4 @@
-package manager
+package token
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func CreateLoginToken(ip string, client *dapr.Client, ctx *context.Context, seed string) (string, error) {
+func CreateRefreshToken(ip string, client *dapr.Client, ctx *context.Context) (string, error) {
 	var strBuild strings.Builder
 
 	strBuild.WriteString(seed)
