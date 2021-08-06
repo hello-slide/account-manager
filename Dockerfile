@@ -7,7 +7,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY ./manager/ ./manager/
-COPY ./tokne ./token/
+COPY ./token ./token/
 COPY ./state ./state/
 COPY ./main.go ./
 
