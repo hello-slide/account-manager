@@ -7,9 +7,9 @@ import (
 	googleAuthIDTokenVerifier "github.com/futurenda/google-auth-id-token-verifier"
 )
 
-func Verify(token string, client *dapr.Client, ctx *context.Context) (*googleAuthIDTokenVerifier.ClaimSet, error) {
+func Verify(token string, client *dapr.Client, ctx *context.Context, key string) (*googleAuthIDTokenVerifier.ClaimSet, error) {
 	v := googleAuthIDTokenVerifier.Verifier{}
-	if err := v.VerifyIDToken(token, []string{oauthKey}); err != nil {
+	if err := v.VerifyIDToken(token, []string{key}); err != nil {
 		return nil, err
 	}
 

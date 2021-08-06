@@ -2,18 +2,12 @@ package manager
 
 import (
 	"os"
-
-	"github.com/hello-slide/account-manager/token"
 )
 
-var refreshTokenState string
-var userDataState string
-var userEmailState string
+var refreshTokenState string = os.Getenv("REFRESH_TOKEN_STATE")
+var userDataState string = os.Getenv("USER_DATA_STATE")
+var userEmailState string = os.Getenv("USER_EMAIL_STATE")
 
-func SetEnv() {
-	refreshTokenState = os.Getenv("REFRESH_TOKEN_STATE")
-	userDataState = os.Getenv("USER_DATA_STATE")
-	userEmailState = os.Getenv("USER_EMAIL_STATE")
-
-	token.SetEnv()
-}
+var seed string = os.Getenv("SEED")
+var tokenManagerName string = os.Getenv("TOKEN_MANAGER")
+var oauthKey string = os.Getenv("GOOGLE_OAUTH_KEY")

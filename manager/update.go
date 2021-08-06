@@ -10,7 +10,7 @@ import (
 
 func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
 	userTokenState := state.NewState(client, ctx, refreshTokenState)
-	newRefreshToken, err := token.CreateRefreshToken(ip, client, ctx)
+	newRefreshToken, err := token.CreateRefreshToken(ip, client, ctx, seed)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, ol
 		value = []byte(updateValue)
 	}
 
-	sessionToken, err := token.CreateSessionToken(value, client, ctx)
+	sessionToken, err := token.CreateSessionToken(value, client, ctx, tokenManagerName)
 	if err != nil {
 		return nil, err
 	}

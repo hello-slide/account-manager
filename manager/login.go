@@ -10,7 +10,7 @@ import (
 )
 
 func Login(token string, ip string, client *dapr.Client, ctx *context.Context) (*ReturnData, error) {
-	claim, err := _token.Verify(token, client, ctx)
+	claim, err := _token.Verify(token, client, ctx, oauthKey)
 	if err != nil {
 		return nil, err
 	}

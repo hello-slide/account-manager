@@ -6,7 +6,7 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 )
 
-func CreateSessionToken(id []byte, client *dapr.Client, ctx *context.Context) (string, error) {
+func CreateSessionToken(id []byte, client *dapr.Client, ctx *context.Context, tokenManagerName string) (string, error) {
 	content := &dapr.DataContent{
 		ContentType: "text/plain",
 		Data:        id,

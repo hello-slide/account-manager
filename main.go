@@ -107,8 +107,6 @@ func init() {
 		return
 	}
 	client = _client
-
-	manager.SetEnv()
 }
 
 func main() {
