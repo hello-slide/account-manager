@@ -8,7 +8,7 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
-	"github.com/hello-slide/account-manager/network"
+	networkutil "github.com/hello-slide/network-util"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +23,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	token, err := network.GetData("Token", w, r)
+	token, err := networkutil.GetFromKey("Token", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
 		return
@@ -31,13 +31,13 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := manager.Login(token, r.RemoteAddr, &client, &ctx, GoogleOauthKey, SeedValue)
 	if err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
@@ -49,7 +49,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	token, err := network.GetData("LoginToken", w, r)
+	token, err := networkutil.GetFromKey("LoginToken", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
 		return
@@ -57,13 +57,13 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""), SeedValue)
 	if err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
 	tokenJson, err := json.Marshal(user)
 	if err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
@@ -75,13 +75,13 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	token, err := network.GetData("LoginToken", w, r)
+	token, err := networkutil.GetFromKey("LoginToken", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
 		return
 	}
 	if err := manager.Logout(&ctx, &client, token); err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
@@ -91,13 +91,13 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	token, err := network.GetData("LoginToken", w, r)
+	token, err := networkutil.GetFromKey("LoginToken", w, r)
 	if err != nil {
 		fmt.Fprintln(w, err)
 		return
 	}
 	if err := manager.Delete(&ctx, &client, token); err != nil {
-		network.ErrorStatus(w)
+		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
@@ -119,7 +119,7 @@ func main() {
 	mux.HandleFunc("/account/logout", logoutHandler)
 	mux.HandleFunc("/account/delete", deleteHandler)
 
-	handler := network.CorsConfig.Handler(mux)
+	handler := networkutil.CorsConfig.Handler(mux)
 
 	if err := http.ListenAndServe(":3000", handler); err != nil {
 		client.Close()

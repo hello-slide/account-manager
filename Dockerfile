@@ -7,7 +7,8 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY ./manager/ ./manager/
-COPY ./network/ ./network/
+COPY ./tokne ./token/
+COPY ./state ./state/
 COPY ./main.go ./
 
 ARG CGO_ENABLED=0

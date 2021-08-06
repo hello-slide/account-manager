@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/hello-slide/account-manager/network"
+	networkutil "github.com/hello-slide/network-util"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	// token := network.Header("Token", r)
-	network.GetHeader(w, r)
+	networkutil.GetHeader(w, r)
 }
 
 func main() {
