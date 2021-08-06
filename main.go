@@ -8,6 +8,7 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/manager"
+	"github.com/hello-slide/account-manager/token"
 	networkutil "github.com/hello-slide/network-util"
 )
 
@@ -104,6 +105,9 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
+	token.SetEnv()
+	manager.SetEnv()
+
 	_client, err := dapr.NewClient()
 	if err != nil {
 		return
