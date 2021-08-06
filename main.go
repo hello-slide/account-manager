@@ -14,7 +14,7 @@ import (
 var client dapr.Client
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(manager.GetKey()))
+	w.Write([]byte("Hi!"))
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {

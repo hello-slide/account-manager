@@ -2,7 +2,6 @@ package token
 
 import (
 	"context"
-	"fmt"
 
 	dapr "github.com/dapr/go-sdk/client"
 	googleAuthIDTokenVerifier "github.com/futurenda/google-auth-id-token-verifier"
@@ -11,7 +10,7 @@ import (
 func Verify(token string, client *dapr.Client, ctx *context.Context, key string) (*googleAuthIDTokenVerifier.ClaimSet, error) {
 	v := googleAuthIDTokenVerifier.Verifier{}
 	if err := v.VerifyIDToken(token, []string{key}); err != nil {
-		return nil, fmt.Errorf("%v: key: %v", err, key)
+		return nil, err
 	}
 
 	return decode(token)
