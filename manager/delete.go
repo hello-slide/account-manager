@@ -13,7 +13,7 @@ func Delete(ctx *context.Context, client *client.Client, token string) error {
 		return err
 	}
 
-	slideConfigState := state.NewState(client, ctx, "SlideConfig")
+	slideConfigState := state.NewState(client, ctx, "slide-config-state")
 	if err := slideConfigState.Delete(token); err != nil {
 		return err
 	}
