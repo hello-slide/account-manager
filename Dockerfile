@@ -7,8 +7,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY ./manager/ ./manager/
-COPY ./token ./token/
+COPY ./handler ./handler/
 COPY ./state ./state/
+COPY ./utils ./utils/
+COPY ./oauth ./oauth/
 COPY ./main.go ./
 
 ARG CGO_ENABLED=0
