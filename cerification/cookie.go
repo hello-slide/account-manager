@@ -32,7 +32,6 @@ func NewCookieOp() *CookieOperation {
 //	value {string} - cookie value.
 //	exp {int} - date of expiry. It is an hourly unit.
 func (c *CookieOperation) Set(w http.ResponseWriter, name string, value string, exp int) {
-	// Expires
 	expires := time.Now().Add(time.Duration(exp) * time.Hour)
 	maxAge := 60 * 60 * exp
 
@@ -50,6 +49,22 @@ func (c *CookieOperation) Set(w http.ResponseWriter, name string, value string, 
 	}
 
 	http.SetCookie(w, cookie)
+}
+
+// Delete cookie
+//
+// Arguments:
+//	w {http.ResponseWriter} - http writer.
+//	req {http.Request} - http request.
+// name {string} - cookie key.
+func (c *CookieOperation) Delete(w http.ResponseWriter, req http.Request, name string) error {
+	cookie, err := req.Cookie(name)
+	if err != nil {
+		return err
+	}
+	cookie.MaxAge = -1
+	http.SetCookie(w, cookie)
+	return nil
 }
 
 // Get cookie.
