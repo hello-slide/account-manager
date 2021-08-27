@@ -6,11 +6,11 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/state"
-	_token "github.com/hello-slide/account-manager/token"
+	"github.com/hello-slide/account-manager/utils"
 )
 
 func Login(token string, ip string, client *dapr.Client, ctx *context.Context) (*ReturnData, error) {
-	claim, err := _token.Verify(token, client, ctx, oauthKey)
+	claim, err := utils.Verify(token, client, ctx, oauthKey)
 	if err != nil {
 		return nil, err
 	}
