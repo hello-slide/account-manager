@@ -5,14 +5,13 @@ import (
 	"net/http"
 
 	"github.com/hello-slide/account-manager/manager"
-	"github.com/hello-slide/account-manager/utils"
 	networkutil "github.com/hello-slide/network-util"
 )
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	tokenOp := utils.NewTokenOp()
+	tokenOp := networkutil.NewTokenOp()
 
 	refreshToken, err := tokenOp.GetRefreshToken(r)
 	if err != nil {

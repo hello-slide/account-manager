@@ -5,7 +5,6 @@ import (
 
 	"github.com/hello-slide/account-manager/manager"
 	"github.com/hello-slide/account-manager/oauth"
-	"github.com/hello-slide/account-manager/utils"
 	networkutil "github.com/hello-slide/network-util"
 )
 
@@ -24,7 +23,7 @@ func LoginRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenOp := utils.NewTokenOp()
+	tokenOp := networkutil.NewTokenOp()
 	tokenOp.SetRefreshToken(w, user.RefreshToken)
 	tokenOp.SetSessionToken(w, user.Session)
 }
