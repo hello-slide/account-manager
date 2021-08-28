@@ -29,6 +29,7 @@ API_URL="https://api.hello-slide.jp"
   - Google OAuthのリダイレクト先
 - `/account/update`
   - リフレッシュトークンを使用したセッショントークンの更新
+  - `?redirect=/hoge`でリダイレクト指定可能
 - `/account/logout`
   - ログアウト。ユーザ情報は保持します。
 - `/account/delete`
