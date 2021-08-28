@@ -18,7 +18,11 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	tokenOp := networkutil.NewTokenOp(domain)
+	tokenOp, err := networkutil.NewTokenOp(url)
+	if err != nil {
+		networkutil.ErrorResponse(w, 1, err)
+		return
+	}
 
 	refreshToken, err := tokenOp.GetRefreshToken(r)
 	if err != nil {
