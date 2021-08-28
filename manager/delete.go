@@ -8,14 +8,14 @@ import (
 	"github.com/hello-slide/account-manager/state"
 )
 
-func Delete(ctx *context.Context, client *client.Client, token string) error {
-	loginState := state.NewState(client, ctx, refreshTokenState)
+func Delete(ctx context.Context, client *client.Client, token string) error {
+	loginState := state.NewState(ctx, client, refreshTokenState)
 	userId, err := loginState.Get(token)
 	if err != nil {
 		return err
 	}
 
-	userState := state.NewState(client, ctx, userDataState)
+	userState := state.NewState(ctx, client, userDataState)
 
 	var userData map[string]string
 	_userData, err := userState.Get(string(userId.Value))
@@ -28,7 +28,7 @@ func Delete(ctx *context.Context, client *client.Client, token string) error {
 		return err
 	}
 
-	emailState := state.NewState(client, ctx, userEmailState)
+	emailState := state.NewState(ctx, client, userEmailState)
 	if err := emailState.Delete(userData["email"]); err != nil {
 		return err
 	}

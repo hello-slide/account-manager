@@ -1,26 +1,36 @@
 package handler
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/hello-slide/account-manager/manager"
+	"github.com/hello-slide/account-manager/utils"
 	networkutil "github.com/hello-slide/network-util"
 )
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := r.Context()
 
-	token, err := networkutil.GetFromKey("LoginToken", w, r)
+	cookieOp := utils.NewCookieOp()
+
+	refreshToken, err := cookieOp.Get(r, "refresh_token")
 	if err != nil {
-		fmt.Fprintln(w, err)
+		networkutil.ErrorResponse(w, 1, err)
 		return
 	}
-	if err := manager.Logout(&ctx, &client, token); err != nil {
-		networkutil.ErrorStatus(w)
-		fmt.Fprintln(w, err)
+
+	if err := manager.Logout(ctx, &client, refreshToken); err != nil {
+		networkutil.ErrorResponse(w, 1, err)
+		return
+	}
+
+	if err := cookieOp.Delete(w, r, "session_token"); err != nil {
+		networkutil.ErrorResponse(w, 1, err)
+		return
+	}
+
+	if err := cookieOp.Delete(w, r, "refresh_token"); err != nil {
+		networkutil.ErrorResponse(w, 1, err)
 		return
 	}
 }

@@ -7,8 +7,8 @@ import (
 	"github.com/hello-slide/account-manager/state"
 )
 
-func Logout(ctx *context.Context, client *client.Client, token string) error {
-	loginState := state.NewState(client, ctx, refreshTokenState)
+func Logout(ctx context.Context, client *client.Client, token string) error {
+	loginState := state.NewState(ctx, client, refreshTokenState)
 	if err := loginState.Delete(token); err != nil {
 		return err
 	}

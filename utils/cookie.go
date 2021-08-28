@@ -57,7 +57,7 @@ func (c *CookieOperation) Set(w http.ResponseWriter, name string, value string, 
 //	w {http.ResponseWriter} - http writer.
 //	req {http.Request} - http request.
 // name {string} - cookie key.
-func (c *CookieOperation) Delete(w http.ResponseWriter, req http.Request, name string) error {
+func (c *CookieOperation) Delete(w http.ResponseWriter, req *http.Request, name string) error {
 	cookie, err := req.Cookie(name)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (c *CookieOperation) Delete(w http.ResponseWriter, req http.Request, name s
 //
 // Retruns:
 //	{string} - cookie value.
-func (c *CookieOperation) Get(req http.Request, name string) (string, error) {
+func (c *CookieOperation) Get(req *http.Request, name string) (string, error) {
 	cookie, err := req.Cookie(name)
 
 	if err != nil {

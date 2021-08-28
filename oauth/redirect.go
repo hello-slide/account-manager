@@ -9,6 +9,14 @@ import (
 	"google.golang.org/api/option"
 )
 
+// Google OAuth redirect.
+//
+// Arguments:
+//	ctx {context.Context} - Context.
+//	r {*http.Request} - request.
+//
+// Returns:
+//	{*oauthapi.Userinfo} - User info.
 func Redirect(ctx context.Context, r *http.Request) (*oauthapi.Userinfo, error) {
 	code := r.URL.Query()["code"]
 	if len(code) == 0 {
