@@ -10,7 +10,7 @@ import (
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	tokenOp := networkutil.NewTokenOp()
+	tokenOp := networkutil.NewTokenOp(domain)
 
 	refreshToken, err := tokenOp.GetRefreshToken(r)
 	if err != nil {

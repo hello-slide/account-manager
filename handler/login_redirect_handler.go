@@ -23,7 +23,7 @@ func LoginRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenOp := networkutil.NewTokenOp()
+	tokenOp := networkutil.NewTokenOp(domain)
 	tokenOp.SetRefreshToken(w, user.RefreshToken)
 	tokenOp.SetSessionToken(w, user.Session)
 }
