@@ -6,29 +6,25 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/state"
-	_token "github.com/hello-slide/account-manager/token"
+	oauthapi "google.golang.org/api/oauth2/v2"
 )
 
-func Login(token string, ip string, client *dapr.Client, ctx *context.Context) (*ReturnData, error) {
-	claim, err := _token.Verify(token, client, ctx, oauthKey)
-	if err != nil {
-		return nil, err
-	}
-	userId := claim.Sub
-	userEmail := claim.Email
-	userDataJson, err := json.Marshal(claim)
+func Login(ctx context.Context, userData *oauthapi.Userinfo, ip string, client *dapr.Client) (*ReturnData, error) {
+	userId := userData.Id
+	userEmail := userData.Email
+	userDataJson, err := json.Marshal(userData)
 	if err != nil {
 		return nil, err
 	}
 
-	userState := state.NewState(client, ctx, userDataState)
+	userState := state.NewState(ctx, client, userDataState)
 	if err := userState.Set(userId, []byte(userDataJson)); err != nil {
 		return nil, err
 	}
-	emailState := state.NewState(client, ctx, userEmailState)
+	emailState := state.NewState(ctx, client, userEmailState)
 	if err := emailState.Set(userEmail, []byte(userId)); err != nil {
 		return nil, err
 	}
 
-	return Update(ip, client, ctx, true, "", []byte(userId))
+	return Update(ctx, ip, client, true, "", []byte(userId))
 }

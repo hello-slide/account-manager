@@ -15,10 +15,10 @@ type state struct {
 	store  string
 }
 
-func NewState(client *client.Client, ctx *context.Context, store string) *state {
+func NewState(ctx context.Context, client *client.Client, store string) *state {
 	return &state{
 		client: client,
-		ctx:    ctx,
+		ctx:    &ctx,
 		store:  store,
 	}
 }

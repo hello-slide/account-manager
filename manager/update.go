@@ -5,12 +5,12 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/state"
-	"github.com/hello-slide/account-manager/token"
+	"github.com/hello-slide/account-manager/utils"
 )
 
-func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
-	userTokenState := state.NewState(client, ctx, refreshTokenState)
-	newRefreshToken, err := token.CreateRefreshToken(ip, client, ctx, seed)
+func Update(ctx context.Context, ip string, client *dapr.Client, isNew bool, oldToken string, value []byte) (*ReturnData, error) {
+	userTokenState := state.NewState(ctx, client, refreshTokenState)
+	newRefreshToken, err := utils.CreateRefreshToken(ctx, ip, client, seed)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func Update(ip string, client *dapr.Client, ctx *context.Context, isNew bool, ol
 		value = []byte(updateValue)
 	}
 
-	sessionToken, err := token.CreateSessionToken(value, client, ctx, tokenManagerName)
+	sessionToken, err := utils.CreateSessionToken(ctx, value, client, tokenManagerName)
 	if err != nil {
 		return nil, err
 	}
