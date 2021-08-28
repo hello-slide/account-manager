@@ -14,5 +14,5 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, url, 301)
+	http.Redirect(w, r, url, http.StatusMovedPermanently)
 }

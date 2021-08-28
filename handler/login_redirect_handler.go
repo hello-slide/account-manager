@@ -24,7 +24,7 @@ func LoginRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookieOp := utils.NewCookieOp()
-	cookieOp.Set(w, "refresh_token", user.RefreshToken, 24*30)
-	cookieOp.Set(w, "session_token", user.Session, 6)
+	tokenOp := utils.NewTokenOp()
+	tokenOp.SetRefreshToken(w, user.RefreshToken)
+	tokenOp.SetSessionToken(w, user.Session)
 }

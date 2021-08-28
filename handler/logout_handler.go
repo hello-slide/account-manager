@@ -11,9 +11,9 @@ import (
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	cookieOp := utils.NewCookieOp()
+	tokenOp := utils.NewTokenOp()
 
-	refreshToken, err := cookieOp.Get(r, "refresh_token")
+	refreshToken, err := tokenOp.GetRefreshToken(r)
 	if err != nil {
 		networkutil.ErrorResponse(w, 1, err)
 		return
@@ -24,12 +24,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := cookieOp.Delete(w, r, "session_token"); err != nil {
-		networkutil.ErrorResponse(w, 1, err)
-		return
-	}
-
-	if err := cookieOp.Delete(w, r, "refresh_token"); err != nil {
+	if err := tokenOp.DeleteToken(w, r); err != nil {
 		networkutil.ErrorResponse(w, 1, err)
 		return
 	}

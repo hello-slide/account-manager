@@ -1,37 +1,32 @@
 package handler
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/hello-slide/account-manager/manager"
+	"github.com/hello-slide/account-manager/utils"
 	networkutil "github.com/hello-slide/network-util"
 )
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := r.Context()
 
-	token, err := networkutil.GetFromKey("LoginToken", w, r)
+	tokenOp := utils.NewTokenOp()
+
+	refreshToken, err := tokenOp.GetRefreshToken(r)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		networkutil.ErrorResponse(w, 1, err)
 		return
 	}
 
-	user, err := manager.Update(r.RemoteAddr, &client, &ctx, false, token, []byte(""))
+	user, err := manager.Update(ctx, r.RemoteAddr, &client, false, refreshToken, []byte(""))
 	if err != nil {
 		networkutil.ErrorStatus(w)
 		fmt.Fprintln(w, err)
 		return
 	}
-	tokenJson, err := json.Marshal(user)
-	if err != nil {
-		networkutil.ErrorStatus(w)
-		fmt.Fprintln(w, err)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(tokenJson)
+
+	tokenOp.SetRefreshToken(w, user.RefreshToken)
+	tokenOp.SetSessionToken(w, user.Session)
 }
