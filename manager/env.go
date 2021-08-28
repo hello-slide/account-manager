@@ -10,4 +10,3 @@ var userEmailState string = os.Getenv("USER_EMAIL_STATE")
 
 var seed string = os.Getenv("SEED")
 var tokenManagerName string = os.Getenv("TOKEN_MANAGER")
-var oauthKey string = os.Getenv("GOOGLE_OAUTH_KEY")

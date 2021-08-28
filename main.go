@@ -16,8 +16,7 @@ func init() {
 	}
 
 	// Set google oauth config.
-	redirect := "https://api.hello-slide.jp/login/redirect"
-	oauth.SetConfig(redirect)
+	oauth.SetConfig()
 }
 
 func main() {
