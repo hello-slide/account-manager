@@ -28,7 +28,6 @@ func Redirect(ctx context.Context, r *http.Request) (*oauthapi.Userinfo, error) 
 	}
 
 	client := config.Client(ctx, token)
-	// svr, err := oauthapi.NewService(ctx, option.WithHTTPClient(client))
 	svr, err := oauthapi.New(client)
 
 	if err != nil {
