@@ -25,7 +25,7 @@ func GetUserData(ctx context.Context, client client.Client, userId string) ([]by
 	if err != nil {
 		return nil, err
 	}
-	var userDataValue *oauthapi.Userinfo
+	var userDataValue *oauthapi.Userinfo = &oauthapi.Userinfo{}
 
 	if err := json.Unmarshal(value.Value, userDataValue); err != nil {
 		return nil, err
