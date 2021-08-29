@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	oauthapi "google.golang.org/api/oauth2/v2"
 )
 
 var config *oauth2.Config
@@ -20,7 +19,7 @@ func SetConfig() {
 		ClientID:     googleClientId,
 		ClientSecret: googleClientSecret,
 		Endpoint:     google.Endpoint,
-		Scopes:       []string{oauthapi.UserinfoProfileScope},
+		Scopes:       []string{"openid", "email", "profile"},
 		RedirectURL:  redirect,
 	}
 }
