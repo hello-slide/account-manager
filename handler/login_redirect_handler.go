@@ -2,9 +2,11 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/hello-slide/account-manager/manager"
 	"github.com/hello-slide/account-manager/oauth"
+	"github.com/hello-slide/account-manager/utils"
 	networkutil "github.com/hello-slide/network-util"
 )
 
@@ -30,4 +32,12 @@ func LoginRedirectHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenOp.SetRefreshToken(w, user.RefreshToken)
 	tokenOp.SetSessionToken(w, user.Session)
+
+	domain, err := utils.GetDomain(url)
+	if err != nil {
+		networkutil.ErrorResponse(w, 1, err)
+		return
+	}
+
+	http.Redirect(w, r, strings.Join([]string{"https://", domain}, ""), http.StatusMovedPermanently)
 }
