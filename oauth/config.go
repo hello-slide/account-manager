@@ -20,7 +20,7 @@ func SetConfig() {
 		ClientID:     googleClientId,
 		ClientSecret: googleClientSecret,
 		Endpoint:     google.Endpoint,
-		Scopes:       []string{oauthapi.UserinfoEmailScope},
+		Scopes:       []string{oauthapi.UserinfoEmailScope, oauthapi.UserinfoProfileScope},
 		RedirectURL:  redirect,
 	}
 }
