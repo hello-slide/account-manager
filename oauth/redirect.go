@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	oauthapi "google.golang.org/api/oauth2/v2"
-	"google.golang.org/api/option"
 )
 
 // Google OAuth redirect.
@@ -29,7 +28,8 @@ func Redirect(ctx context.Context, r *http.Request) (*oauthapi.Userinfo, error) 
 	}
 
 	client := config.Client(ctx, token)
-	svr, err := oauthapi.NewService(ctx, option.WithHTTPClient(client))
+	// svr, err := oauthapi.NewService(ctx, option.WithHTTPClient(client))
+	svr, err := oauthapi.New(client)
 
 	if err != nil {
 		return nil, err
