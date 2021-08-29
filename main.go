@@ -25,6 +25,7 @@ func main() {
 	mux.HandleFunc("/account/login", handler.LoginHandler)
 	mux.HandleFunc("/account/login/redirect", handler.LoginRedirectHandler)
 	mux.HandleFunc("/account/update", handler.UpdateHandler)
+	mux.HandleFunc("/account/user", handler.UserHandler)
 	mux.HandleFunc("/account/logout", handler.LogoutHandler)
 	mux.HandleFunc("/account/delete", handler.DeleteHandler)
 
