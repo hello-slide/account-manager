@@ -11,9 +11,9 @@ import (
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	redirectPath := r.URL.Query().Get("redirect")
-	var redirectUrl string
 	if len(redirectPath) != 0 {
-		redirectUrl = strings.Join([]string{url, redirectPath}, "")
+		redirectUrl := strings.Join([]string{url, redirectPath}, "")
+		defer http.Redirect(w, r, redirectUrl, http.StatusMovedPermanently)
 	}
 
 	ctx := r.Context()
@@ -39,9 +39,5 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	tokenOp.SetRefreshToken(w, user.RefreshToken)
 	tokenOp.SetSessionToken(w, user.Session)
-
-	if len(redirectPath) != 0 {
-		http.Redirect(w, r, redirectUrl, http.StatusMovedPermanently)
-	}
 
 }
