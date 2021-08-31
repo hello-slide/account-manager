@@ -12,18 +12,10 @@ import (
 func UserHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	tokenOp, err := networkutil.NewTokenOp(url)
-	if err != nil {
-		networkutil.ErrorResponse(w, 1, err)
-		return
-	}
-
-	sessionToken, err := tokenOp.GetSessionToken(r)
+	userId, err := utils.GetSessonToken(ctx, client, w, r, tokenManagerName, url, "/account/user")
 	if err != nil {
 		return
 	}
-
-	userId, err := utils.VerifySessionToken(ctx, client, sessionToken, tokenManagerName)
 
 	if err != nil {
 		redirectUrl := strings.Join([]string{url, "/account/update?redirect=/account/user"}, "")
