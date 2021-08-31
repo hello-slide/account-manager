@@ -37,12 +37,11 @@ func GetSessonToken(
 		return "", err
 	}
 	sessionToken, err := tokenOp.GetSessionToken(r)
-	if err != nil {
-		return "", err
-	}
-	userData, err := VerifySessionToken(ctx, client, sessionToken, tokenManageName)
 	if err == nil {
-		return userData, nil
+		userData, err := VerifySessionToken(ctx, client, sessionToken, tokenManageName)
+		if err == nil {
+			return userData, nil
+		}
 	}
 
 	redirectUrl := strings.Join([]string{apiUrl, "/account/update?redirect=", handlePath}, "")
