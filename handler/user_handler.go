@@ -20,7 +20,7 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		redirectUrl := strings.Join([]string{url, "/account/update?redirect=/account/user"}, "")
 
-		http.Redirect(w, r, redirectUrl, http.StatusMovedPermanently)
+		http.Redirect(w, r, redirectUrl, http.StatusTemporaryRedirect)
 		return
 	}
 
