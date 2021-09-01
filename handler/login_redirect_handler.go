@@ -39,5 +39,5 @@ func LoginRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, strings.Join([]string{"https://", domain}, "/dashboard"), http.StatusMovedPermanently)
+	http.Redirect(w, r, strings.Join([]string{"https://", domain, "/dashboard"}, ""), http.StatusMovedPermanently)
 }
