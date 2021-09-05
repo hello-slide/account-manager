@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -28,8 +27,11 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := manager.Update(ctx, r.RemoteAddr, &client, false, refreshToken, []byte(""))
 	if err != nil {
-		networkutil.ErrorStatus(w)
-		fmt.Fprintln(w, err)
+		if _err := tokenOp.DeleteToken(w, r); _err != nil {
+			networkutil.ErrorResponse(w, 1, _err)
+		} else {
+			networkutil.ErrorResponse(w, 1, err)
+		}
 		return
 	}
 
