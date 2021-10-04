@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/hello-slide/account-manager/manager"
 	"github.com/hello-slide/account-manager/utils"
@@ -17,16 +16,20 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err != nil {
-		redirectUrl := strings.Join([]string{url, "/account/update?redirect=/account/user"}, "")
-
-		http.Redirect(w, r, redirectUrl, http.StatusTemporaryRedirect)
-		return
-	}
-
 	userData, err := manager.GetUserData(ctx, client, userId)
 	if err != nil {
-		networkutil.ErrorResponse(w, 1, err)
+		// delete cookies
+		tokenOp, err := networkutil.NewTokenOp(url)
+		if err != nil {
+			networkutil.ErrorResponse(w, 1, err)
+			return
+		}
+
+		if err := tokenOp.DeleteToken(w, r); err != nil {
+			networkutil.ErrorResponse(w, 1, err)
+			return
+		}
+		networkutil.ErrorResponse(w, 2, err)
 		return
 	}
 
