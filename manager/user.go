@@ -3,6 +3,7 @@ package manager
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/dapr/go-sdk/client"
 	"github.com/hello-slide/account-manager/state"
@@ -25,6 +26,10 @@ func GetUserData(ctx context.Context, client client.Client, userId string) ([]by
 	if err != nil {
 		return nil, err
 	}
+	if len(value.Value) == 0 {
+		return nil, errors.New("user dose not exists")
+	}
+
 	var userDataValue *oauthapi.Userinfo = &oauthapi.Userinfo{}
 
 	if err := json.Unmarshal(value.Value, userDataValue); err != nil {
