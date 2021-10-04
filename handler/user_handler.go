@@ -18,8 +18,7 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 
 	userData, err := manager.GetUserData(ctx, client, userId)
 	if err != nil {
-		networkutil.ErrorResponse(w, 2, err)
-
+		currentErr := err
 		// delete cookies
 		tokenOp, err := networkutil.NewTokenOp(url)
 		if err != nil {
@@ -31,6 +30,8 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 			networkutil.ErrorResponse(w, 1, err)
 			return
 		}
+
+		networkutil.ErrorResponse(w, 2, currentErr)
 		return
 	}
 
