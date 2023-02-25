@@ -11,7 +11,7 @@ require (
 	github.com/hello-slide/network-util v1.0.10
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
-	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/api v0.54.0
 	google.golang.org/genproto v0.0.0-20210825212027-de86158e7fda // indirect
